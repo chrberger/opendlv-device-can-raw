@@ -20,16 +20,12 @@ project as it ships the following dependencies as part of the source distributio
 
 
 ## Usage
-This microservice is created automatically on changes to this repository via Docker's public registry for:
-* [x86_64](https://hub.docker.com/r/chalmersrevere/opendlv-device-can-raw-amd64/tags/)
-* [armhf](https://hub.docker.com/r/chalmersrevere/opendlv-device-can-raw-armhf/tags/)
-* [aarch64](https://hub.docker.com/r/chalmersrevere/opendlv-device-can-raw-aarch64/tags/)
-
+This microservice is created automatically on changes to this repository.
 
 To run this microservice using our pre-built Docker image, simply start it as follows:
 
 ```
-docker run --rm -ti --net=host --privileged chalmersrevere/opendlv-device-can-raw-multi:v0.0.3 --cid=111 --id=0 --can-channels=can0
+docker run --rm -ti --net=host --privileged chrberger/opendlv-device-can-raw:latest --cid=111 --can-channels=can0:0,can1:1
 ```
 
 
