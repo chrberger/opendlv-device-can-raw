@@ -25,7 +25,7 @@ This microservice is created automatically on changes to this repository.
 To run this microservice using our pre-built Docker image, simply start it as follows:
 
 ```
-docker run --rm -ti --net=host --privileged chrberger/opendlv-device-can-raw:latest --cid=111 --can-channels=can0:0,can1:1
+docker run --rm -ti --net=host --privileged ghcr.io/chrberger/opendlv-device-can-raw:latest --cid=111 --can-channels=can0:0,can1:1
 ```
 
 
