@@ -48,7 +48,7 @@ int32_t main(int32_t argc, char **argv) {
         std::cerr << "         --can-channels: list of CAN devices followed by colon and a senderStamp per CAN  channel to differentiate the CAN frames" << std::endl;
         std::cerr << "         --cid:          CID of the OD4Session to send messages" << std::endl;
         std::cerr << "         --remote:       enable remotely activated recording" << std::endl;
-        std::cerr << "         --rec:          name of the recording file (leave blank to indicate default); default: YYYY-MM-DD_HHMMSS.rec" << std::endl;
+        std::cerr << "         --rec:          name of the recording file; default: YYYY-MM-DD_HHMMSS.rec" << std::endl;
         std::cerr << "         --recsuffix:    additional suffix to add to the .rec file" << std::endl;
         std::cerr << "         --verbose:      print received frames" << std::endl;
 
@@ -85,7 +85,6 @@ int32_t main(int32_t argc, char **argv) {
           return retVal;
         };
         const bool REMOTE{commandlineArguments.count("remote") != 0};
-        const bool DO_REC{commandlineArguments.count("rec") != 0};
         const std::string REC{(commandlineArguments["rec"].size() != 0) ? commandlineArguments["rec"] : ""};
         const std::string RECSUFFIX{commandlineArguments["recsuffix"]};
         const std::string NAME_RECFILE{(REC.size() != 0) ? REC + RECSUFFIX : (getYYYYMMDD_HHMMSS() + RECSUFFIX + ".rec")};
@@ -95,11 +94,11 @@ int32_t main(int32_t argc, char **argv) {
         std::string nameOfRecFile;
         std::mutex recFileMutex{};
         std::unique_ptr<std::fstream> recFile{nullptr};
-        if (!REMOTE && DO_REC) {
+        if (!REMOTE && !REC.empty()) {
           recFile.reset(new std::fstream(NAME_RECFILE.c_str(), std::ios::out|std::ios::binary|std::ios::trunc));
           std::cout << "[opendlv-device-can-raw]: Created " << NAME_RECFILE << "." << std::endl;
         }
-        else if (REMOTE && DO_REC) {
+        else {
           od4.reset(new cluon::OD4Session(static_cast<uint16_t>(std::stoi(commandlineArguments["cid"])),
               [REC, RECSUFFIX, getYYYYMMDD_HHMMSS, &recFileMutex, &recFile, &nameOfRecFile](cluon::data::Envelope &&envelope) noexcept {
             if (cluon::data::RecorderCommand::ID() == envelope.dataType()) {
@@ -280,4 +279,3 @@ int32_t main(int32_t argc, char **argv) {
     }
     return retCode;
 }
-
